@@ -2,13 +2,15 @@
 
 CVTailor is a human-in-the-loop CV tailoring tool built with Streamlit.
 
-Principle: maximise fit and minimise change.
+**Principle:** maximise fit and minimise change.
 
 ## Features
-- Paste a master CV
+
+- Load a structured base CV
 - Paste a job description
+- Auto-pick relevant CV sections
 - Use Gemini to suggest minimal improvements
-- Review suggestions in the UI
+- Review and edit content in the UI
 - Export LaTeX and PDF
 
 ## Requirements
@@ -50,5 +52,5 @@ Pre-requisites
 brew install --cask basictex
 sudo tlmgr install enumitem
 sudo /Library/TeX/texbin/tlmgr install paracol tcolorbox titlesec hyperref xcolor enumitem geometry lmodern
-sudo /Library/TeX/texbin/tlmgr install paracol
+sudo /Library/TeX/tex![img.png](img.png)bin/tlmgr install paracol
 ```
