@@ -1,0 +1,44 @@
+person:
+  full_name: Sowjanya Barla
+  location: Liverpool, UK
+  email: you@example.com
+  phone: "+44 ..."
+
+headline: AI Engineer | Knowledge Graphs | RAG
+
+summary: >
+  AI engineer with software engineering experience across backend systems,
+  knowledge graphs and retrieval-augmented generation.
+
+skills:
+  - name: Programming
+    items: [Python, Java, SQL]
+  - name: AI / ML
+    items: [LLMs, RAG, Embeddings]
+
+experience:
+  - id: tcs_backend
+    role: IT Analyst
+    company: Tata Consultancy Services
+    start: 2015
+    end: 2019
+    bullets:
+      - text: Built enterprise workflow systems.
+      - text: Developed backend integrations.
+
+projects:
+  - id: liveaid_rag
+    title: RAG-based Digital Storytelling
+    bullets:
+      - text: Built a storytelling RAG system over knowledge graphs.
+
+education:
+  - degree: MSc Data Science and AI
+    institution: University of Liverpool
+
+certifications:
+  - name: IELTS
+    details: 8.5
+
+interests:
+  - Music history

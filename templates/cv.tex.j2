@@ -1,0 +1,190 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,margin=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{paracol}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+
+\definecolor{headerbg}{HTML}{111827}
+\definecolor{headerfg}{HTML}{FFFFFF}
+\definecolor{sidebarbg}{HTML}{F4F6F8}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=*, itemsep=1pt, topsep=1pt, parsep=0pt, partopsep=0pt}
+
+\titleformat{\section}{\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black
+}
+
+\columnratio{0.65,0.35}
+
+\begin{document}
+
+% =====================
+% HEADER
+% =====================
+\begin{tcolorbox}[
+  colback=headerbg,
+  colframe=headerbg,
+  boxrule=0pt,
+  arc=2mm,
+  left=4mm,
+  right=4mm,
+  top=3mm,
+  bottom=3mm
+]
+{\color{headerfg}
+\centering
+{\LARGE \textbf{ {{ person.full_name | latex_escape }} }}\par
+\vspace{4pt}
+
+{% set header_bits = [] %}
+{% if person.location %}{% set _ = header_bits.append(person.location) %}{% endif %}
+{% if person.phone %}{% set _ = header_bits.append(person.phone) %}{% endif %}
+{% if person.email %}{% set _ = header_bits.append(person.email) %}{% endif %}
+
+{% if header_bits | length > 0 %}
+{{ header_bits | map('latex_escape') | join(" \\textbullet\\ ") }}\par
+{% endif %}
+}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+{\large \textbf{ {{ headline | latex_escape }} }}\par
+
+{% if summary %}
+\section*{Profile}
+{{ summary | latex_escape }}
+{% endif %}
+
+\begin{paracol}{2}
+
+% =====================
+% LEFT COLUMN
+% =====================
+{% if experience %}
+\section*{Experience}
+{% for exp in experience %}
+
+\textbf{ {{ exp.role | latex_escape }} }{% if exp.start or exp.end %}\hfill {{ exp.start | default("", true) | latex_escape }}{% if exp.start and exp.end %}--{% endif %}{{ exp.end | default("", true) | latex_escape }}{% endif %}\par
+
+{% set org_line = [] %}
+{% if exp.company %}{% set _ = org_line.append(exp.company) %}{% endif %}
+{% if exp.location %}{% set _ = org_line.append(exp.location) %}{% endif %}
+{% if org_line | length > 0 %}
+{{ org_line | join(", ") | latex_escape }}\par
+{% endif %}
+
+{% if exp.bullets %}
+\begin{itemize}
+{% for b in exp.bullets %}
+  \item {% if b is mapping %}{{ b.text | latex_escape }}{% else %}{{ b | latex_escape }}{% endif %}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if projects %}
+\section*{Projects}
+{% for prj in projects %}
+
+\textbf{ {{ prj.title | latex_escape }} }{% if prj.start or prj.end %}\hfill {{ prj.start | default("", true) | latex_escape }}{% if prj.start and prj.end %}--{% endif %}{{ prj.end | default("", true) | latex_escape }}{% endif %}\par
+
+{% if prj.org %}
+{{ prj.org | latex_escape }}\par
+{% endif %}
+
+{% if prj.bullets %}
+\begin{itemize}
+{% for b in prj.bullets %}
+  \item {% if b is mapping %}{{ b.text | latex_escape }}{% else %}{{ b | latex_escape }}{% endif %}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+\switchcolumn
+
+% =====================
+% RIGHT COLUMN
+% =====================
+\begin{tcolorbox}[
+  colback=sidebarbg,
+  colframe=sidebarbg,
+  boxrule=0pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=2.5mm,
+  bottom=2.5mm
+]
+
+{% if skills %}
+\section*{Skills}
+{% for s in skills %}
+\textbf{ {{ s["name"] | latex_escape }} }\par
+{{ s["items"] | join(", ") | latex_escape }}\par\vspace{3pt}
+{% endfor %}
+{% endif %}
+
+{% if education %}
+\section*{Education}
+{% for edu in education %}
+
+\textbf{ {{ edu.degree | default("", true) | latex_escape }} }\par
+{% set edu_line = [] %}
+{% if edu.institution %}{% set _ = edu_line.append(edu.institution) %}{% endif %}
+{% if edu.location %}{% set _ = edu_line.append(edu.location) %}{% endif %}
+{% if edu_line | length > 0 %}
+{{ edu_line | join(", ") | latex_escape }}\par
+{% endif %}
+{% if edu.start or edu.end %}
+{{ edu.start | default("", true) | latex_escape }}{% if edu.start and edu.end %}--{% endif %}{{ edu.end | default("", true) | latex_escape }}\par
+{% endif %}
+\vspace{4pt}
+
+{% endfor %}
+{% endif %}
+
+{% if certifications %}
+\section*{Certifications}
+\begin{itemize}
+{% for c in certifications %}
+  {% if c is string %}
+    \item {{ c | latex_escape }}
+  {% else %}
+    \item {{ c.name | latex_escape }}{% if c.details %}: {{ c.details | latex_escape }}{% endif %}
+  {% endif %}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+{% if job_keywords %}
+\section*{Job Keywords}
+\begin{itemize}
+{% for kw in job_keywords %}
+  \item {{ kw | latex_escape }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+\end{tcolorbox}
+
+\end{paracol}
+
+\end{document}
